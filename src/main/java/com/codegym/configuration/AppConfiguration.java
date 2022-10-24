@@ -1,9 +1,10 @@
 package com.codegym.configuration;
 
-import com.codegym.repository.blog.BlogRepository;
-import com.codegym.repository.blog.IBlogRepository;
+import com.codegym.formatter.CategoryFormatter;
 import com.codegym.service.blog.BlogService;
 import com.codegym.service.blog.IBlogService;
+import com.codegym.service.category.CategoryService;
+import com.codegym.service.category.ICategoryService;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,6 +14,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.data.web.config.EnableSpringDataWebSupport;
+import org.springframework.format.FormatterRegistry;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
@@ -37,8 +41,10 @@ import java.util.Properties;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan("com.codegym.controller")
+@ComponentScan("com.codegym")
 @EnableTransactionManagement
+@EnableJpaRepositories("com.codegym.repository")
+@EnableSpringDataWebSupport
 public class AppConfiguration implements WebMvcConfigurer, ApplicationContextAware {
 
     private ApplicationContext applicationContext;
@@ -118,13 +124,18 @@ public class AppConfiguration implements WebMvcConfigurer, ApplicationContextAwa
         return properties;
     }
 
-    @Bean
-    public IBlogRepository blogRepository() {
-        return new BlogRepository();
-    }
+//    @Bean
+//    public IBlogService blogService() {
+//        return new BlogService();
+//    }
+//
+//    @Bean
+//    public ICategoryService categoryService() {
+//        return new CategoryService();
+//    }
 
-    @Bean
-    public IBlogService blogService() {
-        return new BlogService();
+    @Override
+    public void addFormatters(FormatterRegistry registry) {
+        registry.addFormatter(new CategoryFormatter(applicationContext.getBean(CategoryService.class)));
     }
 }

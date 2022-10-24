@@ -1,7 +1,9 @@
 package com.codegym.controller;
 
 import com.codegym.model.Blog;
+import com.codegym.model.Category;
 import com.codegym.service.blog.IBlogService;
+import com.codegym.service.category.ICategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,15 +13,24 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class BlogController {
     @Autowired
     private IBlogService blogService;
 
+    @Autowired
+    private ICategoryService categoryService;
+
+    @ModelAttribute("categories")
+    public Iterable<Category> category() {
+        return categoryService.findAll();
+    }
+
     @GetMapping("/")
     public ModelAndView listBlog() {
-        List<Blog> blog = blogService.findAll();
+        Iterable<Blog> blog = blogService.findAll();
         ModelAndView modelAndView = new ModelAndView("/blog/list");
         modelAndView.addObject("blog", blog);
         return modelAndView;
@@ -28,6 +39,7 @@ public class BlogController {
     public ModelAndView showCreateForm() {
         ModelAndView modelAndView = new ModelAndView("/blog/create");
         modelAndView.addObject("blog", new Blog());
+        modelAndView.addObject("category", new Category());
         return modelAndView;
     }
 
@@ -42,7 +54,7 @@ public class BlogController {
 
     @GetMapping("/edit-blog/{id}")
     public ModelAndView showEditForm(@PathVariable Long id) {
-        Blog blog = blogService.findById(id);
+        Optional<Blog> blog = blogService.findById(id);
         if (blog != null) {
             ModelAndView modelAndView = new ModelAndView("/blog/edit");
             modelAndView.addObject("blog", blog);
@@ -63,7 +75,7 @@ public class BlogController {
     }
     @GetMapping("/delete-blog/{id}")
     public ModelAndView showDeleteForm(@PathVariable Long id){
-        Blog blog = blogService.findById(id);
+        Optional<Blog> blog = blogService.findById(id);
         if(blog != null) {
             ModelAndView modelAndView = new ModelAndView("/blog/delete");
             modelAndView.addObject("blog", blog);

@@ -1,7 +1,9 @@
 package com.codegym.repository.blog;
 
 import com.codegym.model.Blog;
-import com.codegym.repository.IGeneralRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.stereotype.Repository;
 
-public interface IBlogRepository extends IGeneralRepository<Blog> {
+@Repository
+public interface IBlogRepository extends PagingAndSortingRepository<Blog, Long> {
 }
