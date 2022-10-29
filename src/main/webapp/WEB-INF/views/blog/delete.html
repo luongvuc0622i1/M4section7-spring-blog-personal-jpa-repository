@@ -24,6 +24,13 @@
       <td><textarea type="text" th:field="*{content}"></textarea></td>
     </tr>
     <tr>
+      <td>Category:
+        <select th:field="*{category}">
+          <option th:each="p : ${categories}" th:value="${p.id}" th:text="${p.name}"></option>
+        </select>
+      </td>
+    </tr>
+    <tr>
       <td></td>
       <td><input type="submit" value="Delete blog"></td>
     </tr>

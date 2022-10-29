@@ -32,7 +32,6 @@ public class BlogController {
     @GetMapping("/blogs")
     public ModelAndView listBlogs(@RequestParam("s") Optional<String> s, @RequestParam(defaultValue = "0") int page,
                                   @RequestParam(defaultValue = "5") int size) {
-//        Pageable pageable = new PageRequest(page, size);
         Pageable pageable = PageRequest.of(page, size);
         Page<Blog> blogs;
         if (s.isPresent()) {
@@ -67,7 +66,7 @@ public class BlogController {
         Optional<Blog> blog = blogService.findById(id);
         if (blog != null) {
             ModelAndView modelAndView = new ModelAndView("/blog/edit");
-            modelAndView.addObject("blog", blog);
+            modelAndView.addObject("blog", blog.get());
             return modelAndView;
         } else {
             ModelAndView modelAndView = new ModelAndView("/error.404");
@@ -88,7 +87,7 @@ public class BlogController {
         Optional<Blog> blog = blogService.findById(id);
         if(blog != null) {
             ModelAndView modelAndView = new ModelAndView("/blog/delete");
-            modelAndView.addObject("blog", blog);
+            modelAndView.addObject("blog", blog.get());
             return modelAndView;
 
         }else {
