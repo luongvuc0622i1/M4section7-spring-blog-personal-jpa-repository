@@ -1,7 +1,7 @@
 package com.codegym.service.category;
 
 import com.codegym.model.Category;
-import com.codegym.repository.category.ICategoryRepository;
+import com.codegym.repository.ICategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,12 +13,12 @@ public class CategoryService implements ICategoryService {
     private ICategoryRepository categoryRepository;
 
     @Override
-    public Iterable findAll() {
+    public Iterable<Category> findAll() {
         return categoryRepository.findAll();
     }
 
     @Override
-    public Optional findById(Long id) {
+    public Optional<Category> findById(Long id) {
         return categoryRepository.findById(id);
     }
 
